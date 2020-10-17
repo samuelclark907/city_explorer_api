@@ -12,9 +12,9 @@ const app = express();
 
 app.use(cors());
 
-// app.get('/', (request, response) => {
-//   response.send('Hello Sams World');
-// });
+app.get('/', (request, response) => {
+  response.send('Hello Sams World');
+});
 
 app.get('/location', (request, response) => {
   let city = request.query.city;
@@ -23,17 +23,29 @@ app.get('/location', (request, response) => {
   response.send(location);
 });
 
-app.get('weather', (request, response) => {
-
+app.get('/weather', (request, response) => {
+  let data = require('./data/weather.json');
+  let weatherArr = [];
+  data.data.forEach(value => {
+    let weather = new Weather(value);
+    weatherArr.push(weather);
+  });
+  response.send(weatherArr);
+  console.log(weatherArr);
 });
 
 app.listen(PORT, () => {
   console.log(`running on ${PORT}`);
 });
 
-function Location(obj, query){
+function Location(obj, query) {
   this.latitude = obj.lat;
   this.longitude = obj.lon;
   this.search_query = query;
   this.formatted_query = obj.display_name;
+}
+
+function Weather(obj) {
+  this.forecast = obj.weather.description;
+  this.time = obj.valid_date;
 }
