@@ -21,6 +21,7 @@ app.get('/location', (request, response) => {
   let data = require('./data/location.json')[0];
   let location = new Location(data, city);
   response.send(location);
+
 });
 
 app.get('/weather', (request, response) => {
@@ -32,6 +33,10 @@ app.get('/weather', (request, response) => {
   });
   response.send(weatherArr);
   console.log(weatherArr);
+});
+
+app.get('*', (reg, res) => {
+  res.status(500).send('Error');
 });
 
 app.listen(PORT, () => {
